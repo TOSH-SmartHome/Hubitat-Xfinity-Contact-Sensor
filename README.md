@@ -14,8 +14,8 @@ Detailed instructions coming soon.
 
 ### MQTT
 Easily integrates with MQTT, just add your broker information under preferences and click save. The topics are automatically configured and uses the devices display name in lowercase and an '_' replaces the spaces. Below are all five topics below.
-    stat/device_name/contact
-    stat/device_name/tamper
-    stat/device_name/temperature
-    stat/device_name/battery
-    stat/device_name/batteryLastReplaced
+    - stat/device_name/contact
+    - stat/device_name/tamper
+    - stat/device_name/temperature
+    - stat/device_name/battery
+    - stat/device_name/batteryLastReplaced
