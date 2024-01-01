@@ -1,0 +1,17 @@
+{
+  "packageName": "Hubitat Xfinity Contact Sensor",
+  "author": "John Goughenour",
+  "version": "2.0.1",
+  "minimumHEVersion": "2.1.9",
+  "dateReleased": "2024-01-01",
+  "licenseFile": "https://raw.githubusercontent.com/TOSH-SmartHome/Hubitat-Xfinity-Contact-Sensor/main/LICENSE",
+  "drivers": [
+    {
+      "id": "8944151d-6ba9-400c-b86e-f4573721e96f",
+      "name": "Xfinity Contact Sensor",
+      "namespace": "tosh",
+      "location": "https://raw.githubusercontent.com/TOSH-SmartHome/Hubitat-Xfinity-Contact-Sensor/main/xfinity_contact_sensor.groovy",
+      "required": false
+    }
+  ]
+}
