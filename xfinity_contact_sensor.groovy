@@ -28,7 +28,7 @@
 import hubitat.zigbee.clusters.iaszone.ZoneStatus
 import hubitat.device.Protocol
 
-public static String version()          {  return "v2.0.1"  }
+public static String version()          {  return "v2.0.2"  }
 public static String name()             {  return "Xfinity Contact Sensor"  }
 public static String driverInfo()       {  return "<p style=\"text-align:center\"></br><strong><a href='https://thisoldsmarthome.com' target='_blank'>This Old Smart Home</a></strong> (tosh)</br>${name()}<br/><em>${version()}</em></p>"  }
 public static Integer defaultDelay()    {  return 333  }    //default delay to use for zigbee commands (in milliseconds)
@@ -124,6 +124,7 @@ def resetBatteryReplacedDate(date) {
     else
         sendEvent(name: "batteryLastReplaced", value: new Date().format('yyyy-MM-dd'))
     sendMqttCommand("${device.currentValue('batteryLastReplaced')}", "batteryLastReplaced")
+	if(infoLogging) log.info "${device.displayName} is setting Battery Last Replaced Date ${device.currentValue('batteryLastReplaced')}"
 }
 
 def sendMqttCommand(cmnd, payload) {
@@ -230,15 +231,16 @@ private parseAttributeMessage(String description) {
 
 // parse events and messages
 def mqttClientStatus(message) {
+    if(debugLogging) log.debug "MQTT Client Status: ${message}"
     switch(message) {
         case ~/.*Connection succeeded.*/:
             if(debugLogging) 
                 log.debug "MQTT Client Status: ${device.displayName} successfully connected to MQTT Broker"
             break
         case ~/.*Error.*/:
-            log.error "MQTT Client Status: ${device.displayName} connect to MQTT Broker has encountered an error - ${message}"
+            log.error "MQTT Client Status: ${device.displayName} connection to MQTT Broker has encountered an error - ${message}"
             break
         default:
-            log.warn "MQTT Client Status ${device.displayName}: unknown status - ${message}"
+            log.warn "MQTT Client Status: ${device.displayName}: unknown status - ${message}"
     }
 }
