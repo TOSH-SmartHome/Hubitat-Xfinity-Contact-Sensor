@@ -135,35 +135,30 @@ def resetBatteryReplacedDate(date) {
         sendEvent(name: "batteryLastReplaced", value: date.format('yyyy-MM-dd'))
     else
         sendEvent(name: "batteryLastReplaced", value: new Date().format('yyyy-MM-dd'))
-    sendMqttCommand("${device.currentValue('batteryLastReplaced')}", "batteryLastReplaced")
+    if(state.mqtt) sendMqttCommand("${device.currentValue('batteryLastReplaced')}", "batteryLastReplaced")
 	if(infoLogging) log.info "${device.displayName} is setting Battery Last Replaced Date ${device.currentValue('batteryLastReplaced')}"
 }
 
 def sendMqttCommand(cmnd, payload) {
     if(debugLogging) log.debug "${device.displayName} MQTT sending Command: ${cmnd} Payload: ${payload}"
-    if(mqttBroker && mqttUsername) {
-        try {
-            if(debugLogging) log.debug "${device.displayName} settting up MQTT Broker"
-            if( !interfaces.mqtt.isConnected() ) {
-                interfaces.mqtt.connect(
-                    "tcp://${mqttBroker}", 
-                    "${location.hub.name.toLowerCase().replaceAll(' ', '_')}_${device.getDeviceNetworkId()}", 
-                    mqttUsername, 
-                    mqttPassword
-                )
-            }
-                
-            if(debugLogging) 
-                log.debug "${device.displayName} is sending Topic: stat/${device.displayName.toLowerCase().replaceAll(' ', '_')}/${payload}/ Command: ${cmnd}"
-            interfaces.mqtt.publish(
-                "stat/${device.displayName.toLowerCase().replaceAll(' ', '_')}/${payload}/", 
-                "${cmnd}", 
-                2, 
-                true
-            )                      
-        } catch(Exception e) {
-            log.error "${device.displayName} unable to send MQTT status ${e}"
+    try {
+        if(debugLogging) log.debug "${device.displayName} settting up MQTT Broker"
+        if( !interfaces.mqtt.isConnected() ) {
+            interfaces.mqtt.connect(
+                "tcp://${mqttBroker}", 
+                "${location.hub.name.toLowerCase().replaceAll(' ', '_')}_${device.getDeviceNetworkId()}", 
+                mqttUsername, mqttPassword
+            )
         }
+            
+        if(debugLogging) 
+            log.debug "${device.displayName} is sending Topic: stat/${device.displayName.toLowerCase().replaceAll(' ', '_')}/${payload}/ Command: ${cmnd}"
+        interfaces.mqtt.publish(
+            "stat/${device.displayName.toLowerCase().replaceAll(' ', '_')}/${payload}/", 
+            "${cmnd}", 2, true
+        )                      
+    } catch(Exception e) {
+        log.error "${device.displayName} unable to send MQTT status ${e}"
     }
 }
 
