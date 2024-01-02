@@ -30,13 +30,25 @@ import hubitat.device.Protocol
 
 public static String version()          {  return "v2.0.2"  }
 public static String name()             {  return "Xfinity Contact Sensor"  }
-public static String driverInfo()       {  return "<p style=\"text-align:center\"></br><strong><a href='https://thisoldsmarthome.com' target='_blank'>This Old Smart Home</a></strong> (tosh)</br>${name()}<br/><em>${version()}</em></p>"  }
+public static String codeUrl()
+{
+    return "https://raw.githubusercontent.com/TOSH-SmartHome/Hubitat-Xfinity-Contact-Sensor/main/xfinity_contact_sensor.groovy"
+}
+public static String driverInfo()
+{
+    return """
+        <p style='text-align:center'></br>
+        <strong><a href='https://thisoldsmarthome.com' target='_blank'>This Old Smart Home</a></strong> (TOSH-SmartHome)</br>
+        ${name()}</br>
+        <em>${version()}</em></p>
+    """
+}
 public static Integer defaultDelay()    {  return 333  }    //default delay to use for zigbee commands (in milliseconds)
 public static Double minVolt()          {  return 2.3  }    //default minimum volts to use for battery volt command
 public static Double maxVolt()          {  return 3.0  }    //default maximum volts to use for battery volt command
 
 metadata {
-	definition (name: name(), namespace: "tosh", author: "John Goughenour") {
+	definition (name: name(), namespace: "TOSH-SmartHome", author: "John Goughenour", importUrl: codeUrl()) {
         capability "Configuration"
         capability "Sensor"
         capability "ContactSensor"
@@ -56,7 +68,7 @@ metadata {
     
     preferences {
         input(name: "batteryInterval", type: "number", title: "<b>Battery Reporting Interval</b>", defaultValue: 12, 
-              description: "Set battery reporting interval by this many <b>hours</b>.", required: false)
+              description: "Set battery reporting interval by this many <b>hours</b>.</br>Default: 12 hours", required: false)
         input(name: "tempInterval", type: "number", title: "<b>Temperature Reporting Interval</b>", defaultValue: 0, 
               description: "Set temperature reporting interval by this many <b>minutes</b>. </br>Default: 0 (Disabled)", required: false)
         input name: "tempOffset", title: "<b>Temperature Calibration</b>", type: "number", range: "-128..127", defaultValue: 0, required: true, 
